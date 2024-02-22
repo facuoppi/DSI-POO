@@ -1,0 +1,62 @@
+@startuml
+
+node "Cliente Web" as presWeb <<device>>#E1F5FE{
+component [ExploradorWeb] #DCE775 
+}
+
+node "servidor Web" as NodeservidorWeb #E1F5FE{
+component [servidorWeb] #DCE775
+component [EncuestaPresWeb] #C5CAE9
+component [llamadasPresWeb] #C5CAE9
+component [clientesPresWeb] #C5CAE9
+component [operadorPresWeb] #C5CAE9
+component [auditoriaPresWeb] #C5CAE9
+component [usuarioPresWeb] #C5CAE9
+component [opcionesPresWeb] #C5CAE9
+component [reportesPresWeb] #C5CAE9
+}
+node "Servidor Aplicaciones" as NodeApps #E1F5FE{
+component [Persistencia] #4DB6AC
+component [GestorDeOpciones] <<subsistema>> #fae4fc
+component [GestorDeUsuarios] <<subsistema>> #fae4fc
+component [operador] #fae4fc
+component [descripcionOperador] #fae4fc
+component [interfazllamadasConOperador] #C5CAE9
+component GestorDeAuditoria <<subsistema>> #fae4fc
+component GestorDeReportes <<subsistema>> #fae4fc
+component GestorDeClientes <<subsistema>> #fae4fc
+component interfazDeEnvioDeEncuesta #C5CAE9
+component Encuesta #fae4fc
+component llamada #fae4fc
+component respuestaLlamada #fae4fc
+component respuestaEncuesta #fae4fc
+component interfazTelefonica #C5CAE9
+component procesadorLlamadas #C5CAE9
+component grabadorDeLlamadas #C5CAE9
+ 
+}
+node "Servidor de Base de datos" as NodeBD #E1F5FE{
+component [Base de Datos] #ffc77d
+}
+node Router <<device>>  #E1F5FE{
+  component [chipTelefonico] as c2 #fae4fc
+}
+node telefonoOperador <<device>> #E1F5FE{
+  component [chipTelefonico] as c1 #DCE775
+  
+}
+node "Servidor SMS" as servidorSMS #E1F5FE{
+  component ServidorSMS <<executable>> #EF9A9A
+}
+
+
+
+
+presWeb  -down- NodeservidorWeb 
+NodeservidorWeb -down--- NodeApps
+NodeBD  -up---- NodeApps
+NodeApps -up- Router
+NodeApps -right-- telefonoOperador
+NodeApps -down-- servidorSMS
+
+@enduml

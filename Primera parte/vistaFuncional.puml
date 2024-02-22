@@ -1,0 +1,43 @@
+@startuml
+left to right direction
+actor Usuario as u
+usecase "41. Iniciar sesión" as c41
+actor "Operador" as o
+actor "Responsable de parametrización" as rp
+actor "Coordinador" as r
+actor "cliente" as c
+actor "Auditor" as a
+actor "Celular" as cel
+usecase "1. Registrar Llamada" as c1
+
+
+usecase "3. Registrar escucha de llamadas" as c3
+usecase "4. Enviar Encuesta" as c4
+
+usecase "17. Registrar respuesta de operador" as c17
+usecase "18. Generar informe de consultas realizadas" as c18
+usecase "29. Procesar llamadas sin encuesta" as c29
+usecase "5. Registrar categoria de llamada" as c5
+usecase "6. Modificar categoria de llamada" as c6
+usecase "7. Consultar categoria de llamada" as c7
+usecase "8. Eliminar categoria de llamada" as c8
+u -> c41
+r --> c18
+c4 ..>"extend" c29
+c1 "extend"<.. c17
+u <|-- r
+u <|-- o
+u <|-- rp
+a --|> u
+c --> c1
+a --> c3
+c4 --> cel
+
+o --> c17
+
+
+rp --> c5
+rp --> c6
+rp --> c7
+rp --> c8
+@enduml
