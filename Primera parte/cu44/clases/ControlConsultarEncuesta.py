@@ -117,4 +117,3 @@ class ControladorConsultaEncuesta:
         datosLlamada = self.datosLlamada
         df = pd.DataFrame(datosLlamada)
         df.to_markdown('informe.md', index=False)
-        

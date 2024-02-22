@@ -11,5 +11,3 @@ class Cliente:
         return self.nombreCompleto
     def __str__(self):
         return self.nombreCompleto
-    
-

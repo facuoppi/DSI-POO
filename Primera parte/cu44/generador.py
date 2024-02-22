@@ -101,18 +101,3 @@ class GeneradorAleatorio:
         self.generarEncuestas()
         for i in range(20):
             self.generarLlamada()
-
-
-   
-
-
-
-
-
-
-
-
-
-
-
-

@@ -51,7 +51,6 @@ node "Servidor SMS" as servidorSMS #E1F5FE{
 
 
 
-
 presWeb  -down- NodeservidorWeb 
 NodeservidorWeb -down--- NodeApps
 NodeBD  -up---- NodeApps

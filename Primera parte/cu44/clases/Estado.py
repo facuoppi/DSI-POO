@@ -21,5 +21,3 @@ class Estado:
             return False
     def __str__(self):
         return self.nombre
-
-    
