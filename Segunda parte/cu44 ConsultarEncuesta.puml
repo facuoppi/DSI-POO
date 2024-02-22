@@ -1,0 +1,80 @@
+@startuml
+actor Coordinaror as co
+boundary PantallaConsultarEncuesta as pa
+control ControlConsultarEncuesta as ge
+entity llamada as ll
+entity "seleccionada:llamada" as sll
+entity cliente as cl
+entity cambioEstado as ce
+entity "ultimo:CambioEstado" as uce
+entity "EstadoInicial:CambioEstado" as ice
+entity Estado as e
+entity RespuestaDeCliente as rc
+entity "primeraRespuesta:RespuestaDeCliente" as urc
+entity RespuestaPosible as rp
+entity Pregunta as pr
+entity Encuesta as en
+
+co -> pa: opcConsultarEncuesta()
+pa -> pa: habilitarPantalla()
+pa -> ge: consultarEncuesta()
+co -> pa: tomarSeleccionFechaInicio()
+co -> pa: tomarSeleccionFechaFin()
+pa -> ge: tomarSeleccionFechaInicio()
+pa -> ge: tomarSeleccionFechaFin()
+ge -> ge: buscarLlamadasRespondidas()
+loop "mientras hay llamadas"
+ge -> ll: esDePeriodo()
+loop "mientras haya cambios de estado"
+ll -> ce: esEstadoInicial()
+ce -> e: esIniciada()
+end
+ll -> ice: getFechaHoraInicio()
+ge -> ll: tieneEncuestaRespondida()
+ge -> ge: agregarLlamadaEnPeriodo()
+
+end
+ge -> pa: actualizarTablaLlamadas()
+loop "mientras haya llamadas en periodo"
+pa -> ge: obtenerNombreClienteLlamada()
+ge -> ll: getNombreClienteLlamada()
+pa -> ge: obtenerUltimoEstadoLlamada()
+ge -> ll: determinarUltimoEstado()
+ll -> ce: *esUltimoCambioEstado()
+ll -> uce: getNombreEstado()
+uce -> e: getNombre()
+pa -> ge: obtenerDuracionLlamada()
+ge -> ll: getDuracion()
+end
+co -> pa: tomarSeleccionLlamada()
+pa -> ge: tomarSeleccionLlamada()
+ge -> ge: obtenerDatosLlamada()
+ge -> sll: mostrarDatosLlamada()
+sll -> sll: getNombreClienteDeLlamada()
+sll -> cl: getNombre()
+sll -> sll: determinarUltimoEstado()
+sll -> ce: *esUltimoCambioEstado()
+sll -> uce: getNombreEstado()
+uce -> e: getNombre()
+sll -> sll: getDuracion()
+sll -> sll: getRespuestas()
+loop "mientras tenga respuestas"
+sll -> rc: getDescripcionRta()
+rc -> rp: getDescripcionRta()
+rp -> pr: *esDePregunta()
+rp -> pr: getDescripcion()
+sll -> rc: obtenerValorSeleccionado()
+rc -> rp: getValor()
+end
+sll -> urc: obtenerEncuesta()
+urc -> rp: obtenerEncuesta()
+rp -> pr: *esDePregunta()
+rp -> pr: obtenerEncuesta()
+pr -> en: *esDeEncuesta()
+pr -> en: getDescripcionEncuesta()
+ge -> pa: mostrarDatosLlamada()
+co -> pa: tomarSeleccionFormato()
+pa -> ge: tomarSeleccionFormato()
+ge -> ge: generarInformeCSV()
+ge -> ge: finCU()
+@enduml

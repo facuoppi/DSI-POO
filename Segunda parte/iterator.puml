@@ -1,0 +1,31 @@
+interface IAgregado{
+	crearIterador()
+}
+
+class AgregadoConcreto{
+	crearIterador()
+}
+AgregadoConcreto ..> IteradorConcreto
+AgregadoConcreto ..|> IAgregado
+
+class IteradorConcreto{
+	primero()
+	siguiente()
+	haTerminado()
+	elementoActual()
+	cumpleFiltros(filtros: Object[])
+}
+IteradorConcreto --> AgregadoConcreto
+IteradorConcreto ..|> IIterador
+
+interface IIterador{
+	primero()
+	siguiente()
+	haTerminado()
+	elementoActual()
+	cumpleFiltros(filtros: Object[])
+}
+
+class Cliente{}
+Cliente --> IIterador
+Cliente --> IAgregado

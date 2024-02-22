@@ -1,0 +1,168 @@
+@startuml
+left to right direction
+
+entity Llamada <<entity>>{
+descripcionOperador
+detalleAccionRequerida
+duracion
+encuestaEnviada
+observacionAuditor
+respuestasDeEncuesta:RespuestaDeCliente
+cambioEstado:CambioEstado
+cliente:Cliente
+
+new()
+agregarCambioEstado()
+agregarRespuestaDeEncuesta()
+determinarEstadoInicial()
+esDePeriodo()
+tieneEncuestaRespondida()
+getDuracion()
+getNombreClienteLlamada()
+determinarUltimoEstado()
+getRespuestas()
+mostrarDatosLlamada()
+
+}
+
+entity RespuestaDeCliente <<entity>>{
+fechaEncuesta
+respuestaSeleccionada: RespuestaPosible
+
+new()
+getDescripcionRta()
+obtenerValorSeleccionado()
+obtenerEncuesta()
+getRespuesta()
+}
+
+entity RespuestaPosible <<entity>>{
+descripcion
+valor
+getRespuesta()
+getDescripcionRta()
+obtenerEncuesta()
+}
+
+entity Pregunta<<entity>>{
+respuesta: Respuesta
+pregunta
+
+esDePregunta()
+getDescripcion()
+obtenerEncuesta()
+}
+
+entity Encuesta<<entity>>{
+pregunta: Pregunta
+descripcion
+fechaFinVigencia
+
+new()
+esDeEncuesta()
+getDescripcionEncuesta()
+agregarPreguntas()
+}
+
+entity CambioEstado <<entity>>{
+fechaHoraInicio
+estado:Estado
+
+new()
+esEstadoInicial()
+getFechaHoraInicio()
+getNombreEstado()
+esUltimoCambioEstado()
+obtenerEstadoActual()
+}
+
+entity Estado <<entity>>{
+nombre
+
+new()
+esFinalizada()
+esIniciada()
+getNombre()
+}
+
+entity Cliente <<entity>>{
+dni
+nombreCompleto
+nroCelular
+
+getNombre()
+}
+
+interface PantallaConsultarEncuesta<<Boundary>>{
+fechaHoraInicio_lbl
+fechaHoraFin_lbl
+fechaInicio_input
+fechaFin_input
+buscarLlamada_btn
+llamadas_tbl
+cancelar_btn
+llamadaSelected_tbl
+llamadasEnPeriodo_lbl
+datosLlamada_lbl
+formato_lbl
+formato_input
+confirmar_btn
+
+
+
+opcConsultarEncuesta()
+habilitarPantalla()
+solicitarPeriodo()
+tomarSeleccionFechaInicio()
+tomarSeleccionFechaFin()
+actualizarTablaLlamada()
+pedirSeleccionLlamada()
+tomarSeleccionLlamada()
+mostrarDatosLlamada()
+cancelarOperacion()
+pedirSeleccionFormato()
+tomarSeleccionFormato()
+}
+
+
+abstract ControlConsultarEncuesta<<Control>>{
+fechaHoraInicio
+fechaHoraFin
+llamadaSeleccionada
+llamdasEnPeriodoRespondidas
+formatoSeleccionado
+datosLlamada
+
+consultarEncuesta()
+tomarSeleccionFechaInicio()
+tomarSeleccionFechaFin()
+buscarLlamadasRespondidas()
+tomarSeleccionLlamada()
+agregarLlamadaEnPerido()
+obtenerDatosLlamada()
+getDatosLlamada()
+tomarSeleccionFormato()
+generarInformeCSV()
+cancelarOperacion()
+generarImpresion()
+finCU()
+}
+
+Llamada -->"0..*" RespuestaDeCliente
+RespuestaDeCliente -->"1" RespuestaPosible
+Encuesta o--"1..*" Pregunta 
+Pregunta o--"1..*" RespuestaPosible
+
+Llamada -->"1..*"CambioEstado
+CambioEstado-->"1"Estado
+
+Llamada -->"1"Cliente
+
+ControlConsultarEncuesta ..> PantallaConsultarEncuesta
+ControlConsultarEncuesta <.. PantallaConsultarEncuesta
+
+ControlConsultarEncuesta ..> Llamada
+ControlConsultarEncuesta ..> Encuesta
+
+
+@enduml
