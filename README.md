@@ -1,4 +1,4 @@
-# README - Proyecto de Facultad
+# Proyecto de Facultad - Orientado a objetos
 ## Descripción
 
 Este proyecto es una solución implementada en Python para resolver un caso de uso de un Sistema de Respuesta de Voz Interactiva. El mismo fue realizado con fines educativos para la materia de Diseño de Sistemas [Universidad Tecnologica Nacional]. 
