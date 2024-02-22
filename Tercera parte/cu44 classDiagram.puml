@@ -1,0 +1,126 @@
+@startuml
+
+entity CambioEstado <<entity>>{
+-fechaHoraInicio
+-estado:Estado
+
++new()
++esEstadoInicial():boolean
++getFechaHoraInicio():DateTime
++getNombreEstado():String
++esUltimoCambioEstado(unCambioEstado: CambioEstado):boolean
++obtenerEstadoActual():Estado
+}
+
+entity Estado <<entity>>{
+-nombre: String
+
++new()
++esFinalizada():boolean
++esIniciada():boolean
++getNombre():String
+}
+interface IAgregado{
+    + crearIterador(elementos:Object[]):IIterador
+}
+
+interface IIterador{
+    + primero():void
+    + siguiente():void
+    + haTerminado():boolean
+    + elementoActual():Object
+    + cumpleFiltro(filtros:Object[]):boolean
+}
+class IteradorLlamadas<<iterator>>{
+  - actual:int
+  - elementos: Object[]
+
+  + primero():void
+  + siguiente():void
+  + haTerminado():boolean
+  + elementoActual():Object
+  + new(elem:Llamada[]):void
+  + cumpleFiltro(filtros:Object[]):boolean
+}
+
+class IteradorCambioEstado<<iterator>>{
+  - actual:int
+  - elementos: Object[]
+
+  + primero():void
+  + siguiente():void
+  + haTerminado():boolean
+  + elementoActual():Object
+  + new(elem:CambioEstado[]):void
+  + cumpleFiltro(filtros:Object[]):boolean
+}
+
+
+entity Llamada <<entity>> {
+- descripcionOperador
+- detalleAccionRequerida
+-duracion
+-encuestaEnviada
+-observacionAuditor
+-respuestasDeEncuesta:RespuestaDeCliente
+-cambioEstado:CambioEstado
+-cliente:Cliente
++new():void
++crearIterador(elementos:CambioEstado[],filtros:Object[]):IIterador
++agregarCambioEstado(unCambioEstado:CambioEstado):void
++agregarRespuestaDeEncuesta(respuestasEncuesta:RespuestaDeCliente):void
++esDePeriodo(fechaInicio:DateTime,fechaFin:DateTime):Boolean
++tieneEncuestaRespondida():Boolean
++getDuracion():int
++determinarEstadoInicial():DateTime
++getNombreClienteLlamada():String
++determinarUltimoEstado():String
++getRespuestas(listaPreguntas:Preguntas[]):(Preguntas,RespuestaDeCliente)
++mostrarDatosLlamada(listaDeEncuestas:Encuesta[],listaPreguntas:Preguntas[]):Llamada{}
+
+}
+
+
+
+abstract ControlConsultarEncuesta<<Control>>{
+- fechaHoraInicio: DateTime
+- fechaHoraFin: DateTime
+- llamadaSeleccionada: Llamada
+- llamdasEnPeriodoRespondidas: Llamada[]
+- formatoSeleccionado: String
+- datosLlamada: String
+
++consultarEncuesta():void
++crearIterador(elementos:Llamada[],filtros:Object[]):IIterador
++tomarSeleccionFechaInicio(fecha:DateTime):void
++tomarSeleccionFechaFin(fecha:DateTime):void
++buscarLlamadasRespondidas():Llamada[]
++agregarLlamadaEnPeriodo(llamada_en_periodo:Llamada):void
++tomarSeleccionLlamada(llamadaSeleccionada:Llamada):void
++obtenerDatosLlamada():Llamada{}
++getDatosLlamada():Llamada{}
++tomarSeleccionFormato(seleccion:String):void
++generarInformeCSV():void
++cancelarOperacion():void
++generarImpresion():void
++finCU():void
+}
+CambioEstado-->"1"Estado
+IteradorLlamadas ..> Llamada
+IteradorCambioEstado ..> CambioEstado
+Llamada -->"1..*"CambioEstado
+
+
+
+IteradorLlamadas ..|> IIterador
+IteradorCambioEstado ..|> IIterador
+ControlConsultarEncuesta ..|> IAgregado
+Llamada ..|> IAgregado
+ControlConsultarEncuesta ..> IteradorLlamadas
+Llamada ..> IteradorCambioEstado
+
+ControlConsultarEncuesta ..> Llamada
+
+
+
+@enduml

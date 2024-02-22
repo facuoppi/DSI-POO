@@ -1,0 +1,37 @@
+@startuml
+control ControlConsultarEncuesta as ge
+participant ":IIteradorLlamada" as ill
+entity llamada as ll
+participant ":IIteradorCambioEstado" as ilc
+entity cambioEstado as ce
+entity "EstadoInicial:CambioEstado" as ice
+entity Estado as e
+
+ge -> ge: buscarLlamadasRespondidas():void
+ge -> ge: crearIterador(elementos:Llamada[],filtros:Object[]):IIterador
+ge --> ill: new(elem:Llamada[],filtros:Object[])
+ge -> ill: primero():void
+group loop recorrer llamadas [haTerminado := false]
+ge -> ill: haTerminado():boolean
+ge -> ill: elementoActual():Llamada
+ill -> ill: cumpleFiltro(filtros:Object[]):boolean
+ill -> ll: esDePeriodo(fechaHoraInicio:Date,fechaHoraFin:Date):boolean
+ll -> ll: crearIterador(elementos:CambioEstado[],filtros:Object[]):IIterador
+ll --> ilc: new(elem:CambioEstado[],filtros:Object[])
+ll -> ilc: primero():void
+group loop recorrer cambios de estado [haTerminado := false]
+ll -> ilc: haTerminado():boolean
+ll -> ilc: elementoActual():CambioEstado
+ilc -> ilc: cumpleFiltro(filtros:Object[]):boolean
+ilc -> ce: esEstadoInicial():boolean
+ce -> e: esIniciada():boolean
+ll -> ilc: siguiente():void
+end
+ll ->ilc: elementoActual():CambioEstado
+ll -> ice: getFechaHoraInicio():DateTime
+ill -> ll: tieneEncuestaRespondida():boolean
+ill -> ge: agregarLlamadaEnPeriodo(llamada_en_periodo:Llamada):void
+ge -> ill: siguiente():void
+end
+
+@enduml
